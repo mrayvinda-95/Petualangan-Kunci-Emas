@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Petualangan Pecahan: Misi Kunci Emas</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff3d6;--card:#fffdf6;--ink:#1d2b3a;--mute:#5b6b7b;--accent:#e8512f;--ok:#1f9d6b;--line:#e8d6a8;--gold:#f5c518;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1a2b;--card:#16293f;--ink:#f3ead6;--mute:#a9b8c8;--line:#2b4262}}
+:root[data-theme="dark"]{--bg:#0d1a2b;--card:#16293f;--ink:#f3ead6;--mute:#a9b8c8;--line:#2b4262}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Fredoka","Trebuchet MS",Verdana,sans-serif;font-size:18px;line-height:1.5}
+main{max-width:680px;margin:0 auto;padding:16px}
+h1,h2,h3{margin:.2em 0;line-height:1.15}
+h1{font-size:2.2rem}
+.card{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:18px;margin:14px 0}
+button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:12px 22px;min-height:46px;background:var(--accent);color:#fff;cursor:pointer}
+button.alt{background:transparent;color:var(--ink);border:2px solid var(--line)}
+button:disabled{opacity:.45;cursor:not-allowed}
+:focus-visible{outline:3px solid #2b7fff;outline-offset:2px}
+input{font:inherit;font-size:1.3rem;width:100%;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+.mute{color:var(--mute);font-size:.9rem}
+.scene{position:relative;height:170px;border-radius:18px;overflow:hidden;margin:10px 0;border:2px solid var(--line)}
+.sea{background:linear-gradient(#1479b0,#06213f)}.cave{background:linear-gradient(#4a3350,#140d1a)}.volc{background:linear-gradient(#ffb36b,#8a2410)}.fall{background:linear-gradient(#a6ecf5,#2b8a6e)}
+.scene .deco{position:absolute;inset:8px 12px auto;font-size:1.6rem;display:flex;justify-content:space-between;opacity:.8}
+.hero,.hz{position:absolute;bottom:14px;transition:left .7s ease;line-height:1}
+.hero{font-size:44px;z-index:2}.hz{font-size:64px}
+.hop{animation:hop .5s}.shake{animation:shake .4s}
+@keyframes hop{50%{transform:translateY(-34px)}}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.bar{height:12px;background:var(--line);border-radius:9px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .5s}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.hearts{font-size:1.4rem;letter-spacing:2px}
+.qt{font-size:1.45rem;font-weight:600;margin:8px 0 14px}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.85em;line-height:1.1;margin:0 .15em}
+.fr>span:first-child{border-bottom:2px solid currentColor;padding:0 .25em}
+.row{display:flex;gap:10px}.row input{flex:1}
+.msg{min-height:1.6em;margin:8px 0 0;font-weight:600}
+.map{display:grid;gap:12px;margin-top:12px}
+.stop{display:flex;gap:14px;align-items:center;text-align:left;width:100%;background:var(--card);color:var(--ink);border:2px solid var(--line);padding:14px 16px;border-radius:16px}
+.stop b{display:block;font-size:1.1rem}.stop span.e{font-size:2.2rem}
+.stop.done{border-color:var(--ok)}
+.ov{position:fixed;inset:0;background:rgba(5,12,24,.75);display:grid;place-items:center;padding:20px;z-index:20}
+.ov .card{max-width:440px;text-align:center;margin:0}
+.plaque{display:inline-block;margin:10px 0;padding:12px 20px;border-radius:12px;background:linear-gradient(135deg,#ffe27a,#d9a400);color:#4a3200;font-weight:700;font-size:1.25rem;letter-spacing:.06em;border:3px solid #8a6500}
+.key{font-size:90px;line-height:1;filter:drop-shadow(0 6px 10px rgba(217,164,0,.6));animation:hop 1.6s infinite}
+.cf{position:fixed;top:-30px;font-size:1.6rem;z-index:30;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(112vh) rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+const L=[
+{n:'Laut Dalam',t:'Perkalian bilangan asli dengan pecahan',e:'🌊',hero:'🤿',haz:'🦈',cls:'sea',deco:'<span>🐠</span><span>🪸</span><span>🐙</span>',ask:'Hitunglah:',k:'frac',
+ pro:'Kamu menyelam ke Laut Dalam untuk mencari kunci emas. Tiba-tiba seekor hiu mengejarmu! Jawab soal perkalian dengan benar agar kamu berenang menjauh.',
+ win:'Kamu berhasil lolos dari kejaran hiu!',lose:'Hiu menangkapmu! Ayo berenang lagi dari awal.',
+ q:[["3 × [1/2]","3/2"],["4 × [1/3]","4/3"],["5 × [2/5]","2"],["6 × [3/4]","9/2"],["8 × [5/6]","20/3"],["7 × [2/3]","14/3"],["9 × [4/9]","4"],["12 × [3/8]","9/2"],["10 × [7/10]","7"],["15 × [2/5]","6"],["[1/2] × 14","7"],["[3/4] × 20","15"],["[2/3] × 18","12"],["[5/6] × 24","20"],["[4/7] × 21","12"],["[3/5] × 25","15"],["[7/8] × 16","14"],["2 [1/2] × 6","15"],["3 [1/3] × 9","30"],["4 × 1 [3/4]","7"]]},
+{n:'Goa di Pinggir Pantai',t:'Mengubah pecahan menjadi desimal',e:'🕳️',hero:'🧗',haz:'🕷️',cls:'cave',deco:'<span>🦇</span><span>💎</span><span>🦇</span>',ask:'Ubah menjadi desimal:',k:'dec',
+ pro:'Kamu berlindung di sebuah goa di pinggir pantai. Di dalamnya, laba-laba raksasa menjaga lorong gelap! Ubah pecahan menjadi desimal agar kamu bisa lari darinya.',
+ win:'Laba-laba raksasa tertinggal jauh di belakangmu!',lose:'Laba-laba raksasa menangkapmu! Coba lagi dari awal lorong.',
+ q:[["[1/2]","0.5"],["[1/4]","0.25"],["[3/4]","0.75"],["[1/5]","0.2"],["[3/5]","0.6"],["[7/10]","0.7"],["[3/8]","0.375"],["[9/20]","0.45"],["[7/25]","0.28"],["[13/50]","0.26"],["1 [1/2]","1.5"],["2 [3/4]","2.75"]]},
+{n:'Gunung Berapi',t:'Mengubah desimal menjadi pecahan',e:'🌋',hero:'🏃',haz:'🔥',cls:'volc',deco:'<span>☄️</span><span>🌋</span><span>☄️</span>',ask:'Ubah menjadi pecahan paling sederhana:',k:'fr',
+ pro:'Gunung berapi meletus! Lava mengalir di belakangmu. Ubah desimal menjadi pecahan paling sederhana untuk berlari menjauh.',
+ win:'Kamu selamat dari letusan gunung berapi!',lose:'Lava menyusulmu! Ayo berlari lagi dari awal.',
+ q:[["0,5","1/2"],["0,25","1/4"],["0,75","3/4"],["0,2","1/5"],["0,4","2/5"],["0,6","3/5"],["0,8","4/5"],["0,35","7/20"],["0,125","1/8"],["0,08","2/25"],["1,5","1 1/2"],["2,25","2 1/4"]]},
+{n:'Air Terjun',t:'Soal cerita',e:'🏞️',hero:'🧒',haz:'🌊',cls:'fall',deco:'<span>🪨</span><span>🪨</span><span>🪨</span>',ask:'',k:'frac',
+ pro:'Tinggal satu rintangan lagi! Di air terjun, kamu harus melompati batu-batu licin. Pecahkan setiap soal cerita agar lompatanmu tepat.',
+ win:'Kamu berhasil melompati semua batu!',lose:'Kamu terpeleset dan hanyut! Ayo coba lagi dari batu pertama.',
+ q:[["Setiap hari Ani minum [3/4] liter susu. Berapa liter susu yang diminum Ani selama 5 hari?","15/4"],["Pak Budi memiliki 12 kg gula. Sebanyak [2/3] bagian dipakai untuk membuat kue. Berapa kilogram gula yang dipakai?","8"],["Sebuah pita panjangnya [3/5] meter. Berapa meter panjang pita jika ada 10 potong pita seperti itu?","6"],["Jarak rumah Dina ke sekolah adalah [3/4] km. Nyatakan jarak tersebut dalam bentuk desimal (km)!","0.75","dec"],["Seutas tali panjangnya 2,5 meter. Nyatakan panjang tali dalam pecahan paling sederhana!","5/2","fr"],["Kebun sekolah terdiri dari 30 petak. Sebanyak [2/5] bagian ditanami sayuran. Berapa petak yang ditanami sayuran?","12"]]}
+];
+let S={name:'',done:[0,0,0,0],li:0,qs:[],qi:0,lives:3,streak:0};
+const app=document.getElementById('app');
+const $=s=>document.querySelector(s);
+const fr=t=>t.replace(/\[(\d+)\/(\d+)\]/g,'<span class="fr"><span>$1</span><span>$2</span></span>');
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const shuffle=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+function parse(s){s=s.trim().replace(/,/g,'.').replace(/\s*\/\s*/g,'/').replace(/\s+/g,' ');let m;
+ if(m=s.match(/^(\d+) (\d+)\/(\d+)$/))return +m[3]?{n:+m[1]*+m[3]+ +m[2],d:+m[3]}:null;
+ if(m=s.match(/^(\d+)\/(\d+)$/))return +m[2]?{n:+m[1],d:+m[2]}:null;
+ if(m=s.match(/^(\d+)(?:\.(\d+))?$/)){const f=m[2]||'';return{n:+(m[1]+f),d:10**f.length}}
+ return null}
+function check(q,v,k){const s=v.trim().replace(/,/g,'.'),b=parse(s),a=parse(q[1]);
+ if(!b)return{m:'Tulis angka saja, misalnya 3/4, 1 1/2, atau 0,75.'};
+ if(k==='dec'&&s.includes('/'))return{m:'Soal ini meminta bentuk desimal, misalnya 0,75.'};
+ if(k==='fr'&&s.includes('.'))return{m:'Soal ini meminta bentuk pecahan, misalnya 3/4.'};
+ if(a.n*b.d!==b.n*a.d)return{ok:false};
+ if(s.includes('/')&&gcd(b.n,b.d)>1)return{m:'Nilainya benar! Sederhanakan dulu pecahannya.'};
+ return{ok:true}}
+function overlay(html,btns){const o=document.createElement('div');o.className='ov';o.innerHTML='<div class="card" role="dialog" aria-modal="true">'+html+'<div id="ob"></div></div>';
+ btns.forEach(([t,f,alt])=>{const b=document.createElement('button');b.textContent=t;if(alt)b.className='alt';b.style.margin='6px';b.onclick=()=>{o.remove();f()};o.querySelector('#ob').appendChild(b)});
+ document.body.appendChild(o);o.querySelector('button').focus()}
+function start(){app.innerHTML=`<div class="card" style="text-align:center"><div style="font-size:3rem">🗝️🌊🌋</div><h1>Petualangan Pecahan</h1><p>Selamatkan dirimu dari empat rintangan dan temukan <b>kunci emas</b>!</p><label for="nm"><b>Siapa namamu, petualang?</b></label><input id="nm" maxlength="30" autocomplete="off" placeholder="Tulis namamu di sini"><p class="msg" id="sm" style="color:var(--accent)"></p><button id="go">Mulai Petualangan</button></div>`;
+ const go=()=>{const v=$('#nm').value.trim();if(!v){$('#sm').textContent='Isi namamu dulu ya, petualang.';return}S={name:v,done:[0,0,0,0],li:0,qs:[],qi:0,lives:3,streak:0};map()};
+ $('#go').onclick=go;$('#nm').onkeydown=e=>{if(e.key==='Enter')go()};$('#nm').focus()}
+function map(){const all=S.done.every(Boolean);
+ app.innerHTML=`<h2>Peta Petualangan</h2><p class="mute">Semangat, ${esc(S.name)}! Selesaikan satu tempat untuk membuka tempat berikutnya.</p><div class="map">`+L.map((l,i)=>{const lock=i>0&&!S.done[i-1];return `<button class="stop ${S.done[i]?'done':''}" data-i="${i}" ${lock?'disabled':''}><span class="e">${lock?'🔒':S.done[i]?'✅':l.e}</span><span><b>${i+1}. ${l.n}</b><span class="mute">${l.t} · ${l.q.length} soal</span></span></button>`}).join('')+`</div>`+(all?'<p><button id="fin">Ambil Kunci Emas 🗝️</button></p>':'');
+ document.querySelectorAll('.stop').forEach(b=>b.onclick=()=>intro(+b.dataset.i));
+ if(all)$('#fin').onclick=final}
+function intro(i){const l=L[i];S.li=i;
+ app.innerHTML=`<div class="scene ${l.cls}"><div class="deco">${l.deco}</div><div class="hero" style="left:10%">${l.hero}</div><div class="hz" style="left:55%">${l.haz}</div></div><div class="card"><h2>${i+1}. ${l.n}</h2><p>${l.pro}</p><p class="mute">Kamu punya 3 nyawa ❤️. Jawaban salah mengurangi 1 nyawa dan rintangan makin dekat. Tiga jawaban benar berturut-turut memulihkan 1 nyawa.</p><button id="st">Mulai</button> <button class="alt" id="bk">Kembali ke peta</button></div>`;
+ $('#st').onclick=()=>play(i);$('#bk').onclick=map}
+function play(i){const l=L[i];S.li=i;S.qs=shuffle(l.q);S.qi=0;S.lives=3;S.streak=0;
+ app.innerHTML=`<div class="top"><button class="alt" id="bk">← Peta</button><div class="hearts" id="hr" aria-live="polite"></div></div><div class="scene ${l.cls}" id="sc"><div class="deco">${l.deco}</div><div class="hz" id="hz">${l.haz}</div><div class="hero" id="hero">${l.hero}</div></div><div class="bar" aria-hidden="true"><i id="pb"></i></div><div class="card"><p class="mute" id="cn"></p><div class="qt" id="qt"></div><div class="row"><input id="ans" autocomplete="off" aria-label="Jawabanmu" placeholder="Jawabanmu"><button id="sb">Jawab</button></div><p class="mute">Contoh tulisan: pecahan 3/4 · campuran 1 1/2 · desimal 0,75</p><p class="msg" id="ms" role="status"></p></div>`;
+ $('#bk').onclick=map;$('#sb').onclick=submit;$('#ans').onkeydown=e=>{if(e.key==='Enter')submit()};show()}
+function show(){const l=L[S.li],q=S.qs[S.qi],p=S.qi/S.qs.length,d=3-S.lives,h=10+p*68;
+ $('#cn').textContent=`Soal ${S.qi+1} dari ${S.qs.length} · ${l.n}`;
+ $('#qt').innerHTML=(l.ask?l.ask+' ':'')+fr(q[0])+(l.ask==='Hitunglah:'?' = ?':'');
+ $('#hr').textContent='❤️'.repeat(S.lives)+'🖤'.repeat(d);
+ $('#hero').style.left=h+'%';$('#hz').style.left=Math.max(-12,h-(32-d*10))+'%';$('#pb').style.width=(p*100)+'%';
+ const a=$('#ans');a.value='';a.focus()}
+function pulse(el,c){el.classList.remove(c);void el.offsetWidth;el.classList.add(c)}
+function submit(){const l=L[S.li],q=S.qs[S.qi],ms=$('#ms'),v=$('#ans').value;if(!v.trim())return;
+ const r=check(q,v,q[2]||l.k);
+ if(r.m){ms.style.color='var(--mute)';ms.textContent=r.m;return}
+ if(r.ok){S.streak++;if(S.streak%3===0&&S.lives<3)S.lives++;S.qi++;pulse($('#hero'),'hop');
+  if(S.qi>=S.qs.length){$('#pb').style.width='100%';$('#hero').style.left='80%';return setTimeout(winLevel,600)}
+  show();const m=$('#ms');m.style.color='var(--ok)';m.textContent=['Benar! 🎉','Hebat! ⭐','Tepat sekali! 👏','Mantap, lanjut! 🚀'][S.qi%4]}
+ else{S.streak=0;S.lives--;pulse($('#hz'),'shake');
+  if(S.lives<=0){$('#hz').style.left='8%';$('#hr').textContent='🖤🖤🖤';return setTimeout(()=>overlay(`<div style="font-size:3rem">${l.haz}</div><h2>Tertangkap!</h2><p>${l.lose}</p>`,[['Coba lagi',()=>play(S.li)],['Ke peta',map,1]]),500)}
+  show();ms.style.color='var(--accent)';ms.textContent='Belum tepat. Hitung lagi dengan teliti ya!'}}
+function winLevel(){const l=L[S.li];S.done[S.li]=1;const last=S.done.every(Boolean);
+ overlay(`<div style="font-size:3rem">${l.hero}✨</div><h2>${l.n} selesai!</h2><p>${l.win}</p><p>Kamu mendapat potongan kunci 🗝️ (${S.done.filter(Boolean).length}/4)</p>`,[[last?'Ambil kunci emas!':'Lanjut ke peta',last?final:map]])}
+function confetti(){for(let i=0;i<45;i++){const s=document.createElement('span');s.className='cf';s.textContent=['🎉','⭐','✨','🎊'][i%4];s.style.left=Math.random()*100+'vw';s.style.animationDuration=(3+Math.random()*3)+'s';s.style.animationDelay=(Math.random()*1.5)+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),7500)}}
+function final(){app.innerHTML=`<div class="card" style="text-align:center"><div class="key" aria-hidden="true">🗝️</div><div class="plaque">SIX CLASS OF SEDARUH</div><h1>Selamat, ${esc(S.name)}!</h1><p>Kamu berhasil menyelesaikan seluruh misi: lolos dari hiu, laba-laba raksasa, letusan gunung berapi, dan melompati batu di air terjun.</p><p><b>Kamu hebat, tekun, dan pantang menyerah.</b> Kunci emas ini pantas kamu dapatkan. Bangga sekali dengan usahamu! 🌟</p><button id="ag">Main lagi</button></div>`;
+ $('#ag').onclick=start;confetti()}
+start();
+</script>
+</body>
+</html>
